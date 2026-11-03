@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e1217">
+<meta name="description" content="Fan-made Android game ports on GitHub · بورتات الألعاب على GitHub">
+<title>Game Ports · بورتات الألعاب</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1217;--card:#171d26;--ink:#eaeef4;--mute:#93a0b2;--line:#273041;--acc:#ffb020;--teal:#3fd0c9;--warn:#ff7a6b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.7}
+button,select,input{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wrap{max-width:860px;margin:auto;padding-inline:16px}
+.hero{padding:20px 0 12px;background:linear-gradient(180deg,rgba(255,176,32,.12),transparent)}
+h1{margin:0;font-size:2.1rem;font-weight:700;line-height:1.2}h1 span{color:var(--acc)}
+.sub{color:var(--mute);margin:4px 0 12px}
+.note{background:rgba(255,122,107,.1);border:1px solid rgba(255,122,107,.35);border-radius:12px;padding:8px 12px;font-size:.86rem;margin:10px 0}
+input[type=search]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0}
+.row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:3px 0}.row::-webkit-scrollbar{display:none}
+.chip,select{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 14px}
+.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#1a1200;font-weight:600}
+#st{color:var(--mute);font-size:.85rem;margin:12px 0 8px;min-height:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;border-inline-start:4px solid var(--teal)}
+.card.warn{border-inline-start-color:var(--acc)}
+.nm{font-family:"JetBrains Mono",monospace;font-size:.95rem;word-break:break-all;direction:ltr;text-align:start}.nm b{color:var(--acc)}
+.ds{margin:6px 0 8px;color:#cdd6e2;font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tag{font-size:.78rem;border:1px solid var(--line);border-radius:99px;padding:0 10px;color:var(--mute)}
+.tag.a{color:var(--acc);border-color:var(--acc)}.tag.w{color:var(--warn);border-color:var(--warn)}.tag.t{color:var(--teal);border-color:var(--teal)}
+.sp{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin:8px 0;background:rgba(255,255,255,.03);border-radius:12px;padding:8px 10px}
+.sp small{display:block;color:var(--mute);font-size:.72rem}.sp span{font-family:"JetBrains Mono",monospace;font-size:.82rem}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.acts a{text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 14px;font-size:.88rem;color:var(--ink)}
+.acts a.p{background:var(--acc);border-color:var(--acc);color:#1a1200;font-weight:600}
+#more{display:block;margin:6px auto 20px;padding:8px 26px}
+.sk{height:150px;border-radius:16px;margin-bottom:12px;background:linear-gradient(90deg,var(--line) 25%,var(--card) 50%,var(--line) 75%);background-size:200% 100%;animation:sh 1.3s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+footer{color:var(--mute);font-size:.8rem;text-align:center;padding:10px 16px 30px}footer a{color:var(--teal)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.top{display:flex;justify-content:space-between;align-items:center}
+.ib{border:1px solid var(--line);background:var(--card);border-radius:99px;min-width:42px;height:40px;padding:0 12px}
+.chip.on{color:var(--acc);border-color:var(--acc)}
+.r2{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:8px;cursor:pointer}
+.r2 .nm{font-size:.88rem}.r2 .mt{color:var(--mute);font-size:.78rem;white-space:nowrap}.r2 .ld{font-size:1.1rem}
+.fab{position:fixed;inset-inline-end:14px;bottom:18px;width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:1.4rem;z-index:15;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.fab.on{background:var(--acc);border-color:var(--acc)}
+#np{position:fixed;inset-inline-end:14px;bottom:82px;width:min(330px,calc(100% - 28px));background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:none;z-index:15;box-shadow:0 8px 28px rgba(0,0,0,.5)}
+#np.open{display:block}#np h2,.sheet h2{font-size:1rem;margin:10px 0 4px}#np .chip{display:block;width:100%;margin:6px 0;text-align:start;border-radius:12px}#np p{color:var(--mute);font-size:.8rem;margin:8px 0 0}
+#bn{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--acc);color:#1a1200;font-weight:600;padding:8px 18px;border-radius:99px;display:none;z-index:40;cursor:pointer;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#sh{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:20}#sh.open{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;animation:up .25s}.sheet .in{padding:16px 18px 24px}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.rq{background:rgba(255,176,32,.07);border:1px solid rgba(255,176,32,.3);border-radius:14px;padding:8px 12px;margin:8px 0}.rq h3{margin:0;font-size:1rem;color:var(--acc)}
+.rq .sp{background:none;padding:6px 0;margin:4px 0}.rn{color:var(--mute);font-size:.78rem;margin:2px 0}
+.cmp{display:inline-block;border-radius:99px;padding:0 12px;font-size:.84rem;font-weight:600;margin:4px 0}
+.cmp.ok{background:rgba(63,208,201,.15);color:var(--teal)}.cmp.warn{background:rgba(255,176,32,.15);color:var(--acc)}.cmp.no{background:rgba(255,122,107,.15);color:var(--warn)}.cmp.unk{background:rgba(147,160,178,.15);color:var(--mute)}
+a.chip{text-decoration:none;display:inline-block;margin-inline-start:6px;color:var(--ink)}.fl{display:block;margin:10px 0}.fl select{display:block;margin-top:4px}
+.dv{margin-bottom:8px}.dv a{margin-inline:2px}
+.gm{font-size:1.5rem;font-weight:700;color:var(--acc);line-height:1.25;margin:2px 0}.gm.sm{font-size:1.05rem}
+.th{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;margin:0 0 10px;background:var(--line);display:block}
+.av{width:42px;height:42px;border-radius:12px;flex:none;background:var(--line)}.hd{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.sec{margin:14px 0 6px;font-weight:600;color:var(--mute);font-size:.85rem}.opts{display:flex;flex-wrap:wrap;gap:8px}
+.fbtn{font-weight:600}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:6px 18px;border-radius:99px;display:none;z-index:50}
+</style></head><body>
+<header class="hero"><div class="wrap">
+  <div class="top"><h1 id="h1"></h1><span><button class="ib" id="ph" aria-label="My phone">📱</button> <button class="ib" id="lg" aria-label="Language">EN</button></span></div>
+  <p class="sub" id="sub"></p>
+  <div class="note" data-i="note"></div>
+  <input id="q" type="search" data-p="search">
+</div></header>
+<div class="bar"><div class="wrap"><div class="row" id="tb"></div><div class="row" id="f1" style="margin-top:6px"></div></div></div>
+<main class="wrap"><div id="st" aria-live="polite"></div><div id="g"></div><button class="chip" id="more" hidden></button></main>
+<footer><div id="dev" class="dv"></div><p data-i="foot"></p><p><a href="privacy.html" data-i="priv"></a></p></footer>
+<div id="sh"><div class="sheet" id="sc"></div></div>
+<button class="fab" id="bell" aria-label="Notifications">🔕</button><div id="np"></div><div id="bn" role="status"></div><div id="toast"></div>
+<script>
+const L = {
+ar:{title:'بورتات <span>الألعاب</span>',sub:"أخبار مشاريع نقل الألعاب إلى أندرويد على GitHub",note:"مشاريع معجبين غير رسمية. غالبًا يلزمك امتلاك نسخة قانونية من اللعبة، وحمّل فقط من صفحة المشروع على GitHub. التطبيق لا يوفّر ولا يستضيف أي ملفات ألعاب.",search:"ابحث باسم اللعبة أو المشروع…",news:"الأخبار",projects:"المشاريع",az:"القائمة",fol:"المتابَعة",all:"الكل",f_new:"محدّث حديثًا",f_assets:"يتطلب ملفات اللعبة",f_rel:"له إصدار",allg:"كل الألعاب",s_upd:"الأحدث تحديثًا",s_stars:"الأعلى تقييمًا (نجوم)",s_rel:"أحدث إصدار",upd:"تحديث ",rel:"إصدار ",needs:"يتطلب ملفات اللعبة الأصلية",arch:"مؤرشف",mem:"الذاكرة",gpu:"الرسوميات",abi:"المعمارية",sto:"التخزين",src:"المصدر على GitHub",readme:"README",rels:"الإصدارات",follow:"☆ تابع",following:"★ تتم متابعته",share:"مشاركة",copied:"تم نسخ الرابط",dev:"كما وصفه المطوّر",specs:"مواصفات التشغيل (مستخرجة آليًا وقد تكون ناقصة)",empty:"لا توجد نتائج",empty_f:"لم تتابع أي مشروع بعد. افتح مشروعًا واضغط «تابع».",more:"عرض المزيد",nodata:"لم تُجلب البيانات بعد. شغّل Workflow «Update ports data» من تبويب Actions في المستودع.",ev_rel:"إصدار جديد",ev_new:"مشروع جديد",cnt:" مشروع",updated:"آخر تحديث للبيانات: ",today:"اليوم",np_t:"الإشعارات",np_new:"صدور بورت جديد",np_fol:"تحديثات المشاريع التي أتابعها",np_all:"تحديثات كل المشاريع",np_test:"تجربة إشعار",np_note:"تعمل الإشعارات بشكل مؤكد أثناء فتح التطبيق، وفي الخلفية يقرر أندرويد توقيتها وقد تتأخر. تُحدَّث البيانات على الخادم كل 6 ساعات تقريبًا.",np_denied:"الإشعارات مرفوضة. فعّلها من إعدادات الهاتف ثم أعد المحاولة",np_unsup:"الإشعارات غير مدعومة هنا",n_new:"🆕 بورت جديد: ",n_upd:"🚀 تحديث: ",n_updn:"🚀 تحديثات جديدة: ",test_t:"تم تفعيل الإشعارات",test_b:"هكذا سيصلك التنبيه",req:"متطلبات الهاتف",req_note:"مستخرجة آليًا من README المشروع وقد تكون ناقصة أو غير دقيقة، فراجع صفحة المشروع قبل التنزيل.",c_ok:"قد يعمل على هاتفك",c_warn:"ذاكرة هاتفك أقل من المطلوب",c_no:"إصدار أندرويد لديك أقل من المطلوب",c_unk:"لا تكفي المعلومات للمقارنة مع هاتفك",soc:"المعالج (حسب README)",ctl:"يد التحكم",yes:"مدعومة",st_final:"نهائي",st_none:"بلا إصدار",st_all:"كل المراحل",f_ok:"يناسب هاتفي",s_dl:"الأكثر تنزيلًا",my_phone:"هاتفي",ph_note:"يُكتشف تلقائيًا لمقارنته بمتطلبات المشاريع، وقد لا يكون دقيقًا. يمكنك تعديله هنا ويُحفظ على جهازك فقط.",ph_and:"إصدار أندرويد",ph_ram:"الذاكرة",ph_save:"حفظ",ph_auto:"غير محدد",dev_t:"تواصل مع المطوّر:",fb:"صفحتي على فيسبوك",suggest:"اقترح مشروعًا أو أبلغ عن مشكلة",sug_sub:"Game Ports: اقتراح أو ملاحظة",filt:"تصفية",sort_h:"الترتيب",stage_h:"مرحلة المشروع",stat_h:"الحالة",game_h:"اللعبة",clear:"مسح الكل",done:"تم",show_img:"عرض الصور",hide_arch:"إخفاء المؤرشف",hide_old:"إخفاء المشاريع الراكدة (بلا تحديث أكثر من سنة)",hide_old_s:"بلا الراكدة",ph_abi:"نوع المعالج (المعمارية)",abi_64:"ARM 64-بت (arm64-v8a)",abi_32:"ARM 32-بت (armv7)",f_32:"يدعم 32-بت (armv7)",c_abi:"معمارية معالجك غير مدعومة في هذا المشروع",ph_abi_note:"لا تُكتشف دائمًا تلقائيًا. معظم الهواتف الحديثة 64-بت، لكن بعض الهواتف الاقتصادية تعمل بنظام 32-بت. إن لم تكن متأكدًا فاترك «غير محدد».",foot:"البيانات من واجهة GitHub API وتُحدَّث كل 6 ساعات تقريبًا. المواصفات مستخرجة آليًا من README فراجع المشروع. أسماء الألعاب وشعاراتها ملك لأصحابها والتطبيق مستقل.",priv:"الخصوصية وحقوق الملكية"},
+en:{title:'Game <span>Ports</span>',sub:"News on fan-made Android game ports on GitHub",note:"Unofficial fan projects. You usually need your own legal copy of the game. Download only from the project's GitHub page. This app provides and hosts no game files.",search:"Search a game or project…",news:"News",projects:"Projects",az:"A–Z list",fol:"Following",all:"All",f_new:"Recently updated",f_assets:"Needs game files",f_rel:"Has release",allg:"All games",s_upd:"Recently updated",s_stars:"Top rated (stars)",s_rel:"Latest release",upd:"Updated ",rel:"Release ",needs:"Requires your own game files",arch:"Archived",mem:"RAM",gpu:"Graphics",abi:"Architecture",sto:"Storage",src:"Source on GitHub",readme:"README",rels:"Releases",follow:"☆ Follow",following:"★ Following",share:"Share",copied:"Link copied",dev:"As described by the developer",specs:"Requirements (auto-extracted, may be incomplete)",empty:"No results",empty_f:"You are not following any project yet. Open one and tap Follow.",more:"Show more",nodata:"No data yet. Run the “Update ports data” workflow from the repository's Actions tab.",ev_rel:"New release",ev_new:"New project",cnt:" projects",updated:"Data updated: ",today:"today",np_t:"Notifications",np_new:"New port released",np_fol:"Updates of projects I follow",np_all:"Updates of all projects",np_test:"Test notification",np_note:"Notifications are reliable while the app is open. In the background Android decides the timing and it may be delayed. Data refreshes on the server about every 6 hours.",np_denied:"Notifications are blocked. Enable them in phone settings and try again",np_unsup:"Notifications are not supported here",n_new:"🆕 New port: ",n_upd:"🚀 Update: ",n_updn:"🚀 New updates: ",test_t:"Notifications enabled",test_b:"This is how alerts will look",req:"Phone requirements",req_note:"Auto-extracted from the project README and may be incomplete or inaccurate; check the project page before downloading.",c_ok:"Likely to run on your phone",c_warn:"Your phone has less RAM than required",c_no:"Your Android version is lower than required",c_unk:"Not enough info to compare with your phone",soc:"Chipset (per README)",ctl:"Controller",yes:"Supported",st_final:"Final",st_none:"No release",st_all:"All stages",f_ok:"Fits my phone",s_dl:"Most downloaded",my_phone:"My phone",ph_note:"Detected automatically to compare with project requirements; it may be inaccurate. Edit it here; it is saved on your device only.",ph_and:"Android version",ph_ram:"RAM",ph_save:"Save",ph_auto:"Not set",dev_t:"Contact the developer:",fb:"My Facebook page",suggest:"Suggest a project or report a problem",sug_sub:"Game Ports: suggestion or feedback",filt:"Filter",sort_h:"Sort by",stage_h:"Project stage",stat_h:"Status",game_h:"Game",clear:"Clear all",done:"Done",show_img:"Show images",hide_arch:"Hide archived",hide_old:"Hide stale projects (no update in over a year)",hide_old_s:"No stale",ph_abi:"Processor type (architecture)",abi_64:"ARM 64-bit (arm64-v8a)",abi_32:"ARM 32-bit (armv7)",f_32:"Supports 32-bit (armv7)",c_abi:"Your processor architecture is not supported by this project",ph_abi_note:"Not always detected automatically. Most modern phones are 64-bit, but some budget phones run a 32-bit system. If unsure, leave it unset.",foot:"Data comes from the GitHub API and refreshes about every 6 hours. Requirements are auto-extracted from READMEs; check the project. Game names and logos belong to their owners; this app is independent.",priv:"Privacy & rights"}
+};
+const FAMS = {"Zelda":/zelda|ocarina|majora|twilight|wind\s*waker|skyward/i,"Resident Evil":/resident\s*evil|biohazard|\bre[1-9]\b/i,"Command & Conquer":/command.{0,5}conquer|generals|red\s*alert|c&c/i,"Mario":/mario/i,"Pokémon":/pok[eé]mon/i,"Sonic":/sonic/i,"Doom / Quake":/doom|quake/i,"Metroid":/metroid/i};
+const $ = id => document.getElementById(id);
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const store = {get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }};
+let lang = store.get("gp-lang", (navigator.language || "").startsWith("ar") ? "ar" : "en"), view = store.get("gp-view", "news"), fam = "", flt = "all", sort = store.get("gp-sort", "stars"), stg = "", q = "", shown = 60;
+let items = [], updatedAt = null, follows = store.get("gp-fol", []), notif = store.get("gp-n", {newp: false, fol: false, all: false});
+const t = k => L[lang][k];
+const days = d => (Date.now() - new Date(d)) / 864e5;
+const ago = d => { const n = Math.floor(days(d)); if (n < 1) return t("today"); const v = n < 31 ? n : n < 365 ? Math.floor(n / 30) : Math.floor(n / 365), u = n < 31 ? 0 : n < 365 ? 1 : 2; return lang === "ar" ? "منذ " + v + " " + ["يوم", "شهر", "سنة"][u] : v + ["d", "mo", "y"][u] + " ago"; };
+const txt = i => i.name + " " + i.desc + " " + i.topics.join(" ") + " " + (i.game || "");
+const toast = s => { const e = $("toast"); e.textContent = s; e.style.display = "block"; clearTimeout(toast.x); toast.x = setTimeout(() => e.style.display = "none", 1800); };
+
+function applyLang() {
+  document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  $("h1").innerHTML = t("title"); $("lg").textContent = lang === "ar" ? "EN" : "ع";
+  document.querySelectorAll("[data-i]").forEach(e => e.textContent = t(e.dataset.i));
+  document.querySelectorAll("[data-p]").forEach(e => e.placeholder = t(e.dataset.p));
+  $("sub").textContent = updatedAt ? t("updated") + ago(updatedAt) + " · " + items.length + t("cnt") : t("sub");
+  $("more").textContent = t("more"); devBlock();
+}
+$("lg").onclick = () => { lang = lang === "ar" ? "en" : "ar"; store.set("gp-lang", lang); applyLang(); controls(); render(); syncSW(); panel(); };
+$("q").oninput = e => { q = e.target.value; shown = 60; render(); };
+$("more").onclick = () => { shown += 60; render(); };
+
+function chip(label, on, fn) { const b = el("button", "chip", label); b.setAttribute("aria-pressed", on); b.onclick = fn; return b; }
+let imgs = store.get("gp-img", true), hArch = store.get("gp-arch", false), hOld = store.get("gp-old", false);
+const gameOf = i => i.game || i.name;
+const DEV = {fb: "https://www.facebook.com/shab.845854", email: "Adamdouma565@gmail.com"};
+const stageOf = i => i.stage || (i.release ? "stable" : "nobuild");
+const stageLabel = s => s === "alpha" ? "Alpha" : s === "beta" ? "Beta" : t(s === "stable" ? "st_final" : "st_none");
+const num = n => n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : String(n);
+const CMP = {ok: ["✓", "c_ok", "ok"], warn: ["⚠", "c_warn", "warn"], no: ["✗", "c_no", "no"], unk: ["?", "c_unk", "unk"], abi: ["✗", "c_abi", "no"]};
+let phone = store.get("gp-phone", null);
+async function detectPhone() {
+  const p = {android: 0, ram: 0, abi: ""};
+  try {
+    const u = navigator.userAgentData;
+    if (u && u.getHighEntropyValues) {
+      const v = await u.getHighEntropyValues(["platformVersion", "architecture", "bitness"]);
+      p.android = parseFloat(v.platformVersion) || 0;
+      if (v.architecture === "arm") p.abi = v.bitness === "64" ? "arm64" : v.bitness === "32" ? "armv7" : "";
+      else if (v.architecture === "x86" && v.bitness === "64") p.abi = "x86_64";
+    }
+  } catch(e){}
+  if (!p.android) { const m = /Android\s+(\d+(?:\.\d+)?)/.exec(navigator.userAgent); if (m) p.android = parseFloat(m[1]); }
+  p.ram = navigator.deviceMemory || 0; return p;
+}
+const abiSet = i => { const s = i.specs || {}; if (s.abis) return s.abis; const a = (s.arch || "").toLowerCase(), o = []; if (/arm64|aarch64/.test(a)) o.push("arm64"); if (/armeabi|armv7/.test(a)) o.push("armv7"); if (/x86_64/.test(a)) o.push("x86_64"); return o; };
+const has32 = i => abiSet(i).includes("armv7");
+const ABI_OK = {arm64: ["arm64", "armv7"], armv7: ["armv7"], x86_64: ["x86_64", "arm64", "armv7"]};
+function compat(i) {
+  const s = i.specs || {}, a = parseFloat((/(\d+(?:\.\d+)?)/.exec(s.android || "") || [])[1]), r = parseFloat(s.ram), ab = abiSet(i), ok = phone && ABI_OK[phone.abi];
+  if (!phone || (!a && !r && !ab.length)) return "unk";
+  if (a && phone.android && phone.android < a) return "no";
+  if (ab.length && ok && !ab.some(x => ok.includes(x))) return "abi";
+  if (r && phone.ram && phone.ram < r) return "warn";
+  return (a && phone.android) || (r && phone.ram) || (ab.length && ok) ? "ok" : "unk";
+}
+function activeFilters() {
+  const a = [];
+  if (view === "projects") {
+    if (flt !== "all") a.push([{new: t("f_new"), assets: t("f_assets"), rel: t("f_rel"), ok: t("f_ok"), armv7: t("f_32")}[flt], () => flt = "all"]);
+    if (stg) a.push([stageLabel(stg), () => stg = ""]);
+    if (hArch) a.push([t("hide_arch"), () => { hArch = false; store.set("gp-arch", false); }]);
+    if (hOld) a.push([t("hide_old_s"), () => { hOld = false; store.set("gp-old", false); }]);
+  }
+  if (fam) a.push([fam, () => fam = ""]);
+  return a;
+}
+function clearFilters() { flt = "all"; stg = ""; fam = ""; hArch = false; hOld = false; store.set("gp-arch", false); store.set("gp-old", false); shown = 60; }
+function controls() {
+  const tb = $("tb"); tb.textContent = "";
+  [["news", t("news")], ["projects", t("projects")], ["az", t("az")], ["fol", t("fol") + " (" + follows.length + ")"]].forEach(([k, l]) => tb.append(chip(l, view === k, () => { view = k; store.set("gp-view", k); shown = 60; controls(); render(); })));
+  const a = $("f1"); a.textContent = ""; const act = activeFilters();
+  const fb = el("button", "chip fbtn" + (act.length ? " on" : ""), "☰ " + t("filt") + (act.length ? " (" + act.length + ")" : "")); fb.onclick = filterSheet; a.append(fb);
+  act.forEach(([l, off]) => { const c = el("button", "chip on", l + " ✕"); c.onclick = () => { off(); shown = 60; controls(); render(); }; a.append(c); });
+}
+function filterSheet() {
+  const s = $("sc"); s.textContent = ""; const d = el("div", "in"); d.append(el("h2", "", t("filt")));
+  const again = () => { shown = 60; filterSheet(); controls(); render(); };
+  const grp = (title, opts, cur, set) => { d.append(el("div", "sec", title)); const w = el("div", "opts"); opts.forEach(([k, l]) => w.append(chip(l, cur === k, () => { set(k); again(); }))); d.append(w); };
+  if (view === "projects") {
+    grp(t("sort_h"), [["stars", t("s_stars")], ["dl", t("s_dl")], ["upd", t("s_upd")], ["rel", t("s_rel")]], sort, k => { sort = k; store.set("gp-sort", k); });
+    grp(t("stage_h"), [["", t("st_all")], ["alpha", "Alpha"], ["beta", "Beta"], ["stable", t("st_final")], ["nobuild", t("st_none")]], stg, k => stg = k);
+    grp(t("stat_h"), [["all", t("all")], ["new", t("f_new")], ["assets", t("f_assets")], ["rel", t("f_rel")], ["ok", t("f_ok")], ["armv7", t("f_32")]], flt, k => flt = k);
+  }
+  grp(t("game_h"), [["", t("allg")], ...Object.keys(FAMS).map(k => [k, k])], fam, k => fam = k);
+  d.append(el("div", "sec", ""));
+  const tg = (label, on, fn) => { const b = chip(label, on, () => { fn(); again(); }); b.style.cssText = "display:block;margin:8px 0;text-align:start;border-radius:12px"; d.append(b); };
+  tg(t("show_img"), imgs, () => { imgs = !imgs; store.set("gp-img", imgs); });
+  if (view === "projects") { tg(t("hide_arch"), hArch, () => { hArch = !hArch; store.set("gp-arch", hArch); }); tg(t("hide_old"), hOld, () => { hOld = !hOld; store.set("gp-old", hOld); }); }
+  const ok = el("button", "chip on", t("done")); ok.onclick = () => $("sh").classList.remove("open");
+  const cl = el("button", "chip", t("clear")); cl.onclick = () => { clearFilters(); again(); };
+  const bar = el("div", "opts"); bar.style.marginTop = "14px"; bar.append(ok, cl); d.append(bar);
+  s.append(d); $("sh").classList.add("open");
+}
+function toggleFollow(i) { const k = follows.indexOf(i.id); k < 0 ? follows.push(i.id) : follows.splice(k, 1); store.set("gp-fol", follows); syncSW(); controls(); render(); }
+function tags(i, rank) {
+  const tg = el("div", "tags"), s = stageOf(i);
+  if (rank) tg.append(el("span", "tag a", "#" + rank));
+  tg.append(el("span", "tag " + ({alpha: "w", beta: "a", stable: "t"}[s] || ""), stageLabel(s)), el("span", "tag", "★ " + i.stars));
+  if (i.downloads) tg.append(el("span", "tag", "⬇ " + num(i.downloads)));
+  if (has32(i)) tg.append(el("span", "tag t", "armv7 · 32-bit"));
+  tg.append(el("span", "tag", t("upd") + ago(i.pushed)));
+  if (i.lang) tg.append(el("span", "tag", i.lang));
+  if (i.license && i.license !== "NOASSERTION") tg.append(el("span", "tag", i.license));
+  if (i.release) tg.append(el("span", "tag t", t("rel") + i.release.tag + " · " + ago(i.release.date)));
+  if (i.assets) tg.append(el("span", "tag a", t("needs")));
+  if (i.archived) tg.append(el("span", "tag w", t("arch")));
+  return tg;
+}
+function reqs(i, compact) {
+  const w = el("div", "rq"), s = i.specs || {}, cm = CMP[compat(i)];
+  w.append(el("h3", "", t("req")), el("div", "cmp " + cm[2], cm[0] + " " + t(cm[1])));
+  const g = el("div", "sp");
+  [["Android", s.android], [t("mem"), s.ram], [t("gpu"), s.gpu], [t("soc"), s.soc], [t("abi"), s.arch], [t("sto"), s.storage], [t("ctl"), s.controller ? t("yes") : null]].forEach(([l, v]) => { const d = el("div"); d.append(el("small", "", l), el("span", "", v || "—")); g.append(d); });
+  w.append(g); if (!compact) w.append(el("p", "rn", t("req_note"))); return w;
+}
+function acts(i, full) {
+  const a = el("div", "acts"), add = (x, u, c) => { const e = el("a", c || "", x); e.href = u; e.target = "_blank"; e.rel = "noopener"; a.append(e); };
+  add(t("src"), i.url, "p"); add(t("readme"), i.url + "#readme"); if (i.release) add(t("rels"), i.release.url);
+  const f = el("button", "chip" + (follows.includes(i.id) ? " on" : ""), follows.includes(i.id) ? t("following") : t("follow")); f.onclick = () => { toggleFollow(i); if (full) sheet(i); }; a.append(f);
+  return a;
+}
+function nameEl(i) { const n = el("div", "nm"); n.append(i.owner + "/", el("b", "", i.name)); return n; }
+function pic(cls, u) { const im = el("img", cls); im.src = u; im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; im.onerror = () => im.remove(); return im; }
+function card(i, rank) {
+  const c = el("article", "card" + (i.assets ? " warn" : ""));
+  if (imgs && i.thumb) c.append(pic("th", i.thumb));
+  const h = el("div", "hd"); if (imgs && i.avatar) h.append(pic("av", i.avatar));
+  const box = el("div"); box.style.minWidth = "0"; const g = el("div", "gm", gameOf(i)); g.dir = "auto"; g.style.cursor = "pointer"; g.onclick = () => sheet(i); box.append(g, nameEl(i)); h.append(box); c.append(h);
+  if (i.desc) { const d = el("p", "ds", i.desc); d.dir = "auto"; c.append(d); }
+  c.append(tags(i, rank), reqs(i, true), acts(i)); return c;
+}
+function row(i, lead) {
+  const r = el("div", "r2"); r.tabIndex = 0; r.onclick = () => sheet(i); r.onkeydown = e => { if (e.key === "Enter") sheet(i); };
+  if (lead) r.append(el("span", "ld", lead)); if (imgs && i.avatar) { const a = pic("av", i.avatar); a.style.width = a.style.height = "34px"; r.append(a); }
+  const box = el("div"); box.style.cssText = "flex:1;min-width:0"; const g = el("div", "gm sm", gameOf(i)); g.dir = "auto"; box.append(g, nameEl(i));
+  r.append(box, el("span", "mt", ago(lead ? i._d : i.pushed))); return r;
+}
+function sheet(i) {
+  const s = $("sc"); s.textContent = ""; const d = el("div", "in");
+  if (imgs && i.thumb) d.append(pic("th", i.thumb));
+  const gm = el("div", "gm", gameOf(i)); gm.dir = "auto"; d.append(gm, nameEl(i), tags(i), reqs(i), el("h2", "", t("dev")));
+  const p = el("p", "ds", i.desc || "—"); p.dir = "auto"; d.append(p);
+  if (i.assets) d.append(el("div", "note", t("needs") + ". " + t("note")));
+  d.append(acts(i, true));
+  const sh = el("button", "chip", t("share")); sh.onclick = async () => { try { if (navigator.share) await navigator.share({title: i.name, url: i.url}); else { await navigator.clipboard.writeText(i.url); toast(t("copied")); } } catch(e){} };
+  const rp = el("a", "chip", t("suggest")); rp.href = "mailto:" + DEV.email + "?subject=" + encodeURIComponent(t("sug_sub") + " - " + i.id);
+  d.append(el("div", "acts", ""), sh, rp); s.append(d); $("sh").classList.add("open");
+}
+function phoneSheet() {
+  const s = $("sc"); s.textContent = ""; const d = el("div", "in"); d.append(el("h2", "", t("my_phone")), el("p", "rn", t("ph_note")));
+  const mk = (label, vals, cur, unit) => { const l = el("label", "fl", label), sel = el("select"), o0 = el("option", "", t("ph_auto")); o0.value = ""; sel.append(o0); vals.forEach(v => { const o = el("option", "", v + unit); o.value = v; o.selected = cur === v; sel.append(o); }); l.append(sel); d.append(l); return sel; };
+  const a = mk(t("ph_and"), [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5], Math.floor((phone && phone.android) || 0), ""), r = mk(t("ph_ram"), [1, 2, 3, 4, 6, 8, 12, 16], (phone && phone.ram) || 0, " GB");
+  const ab = el("select"); [["", t("ph_auto")], ["arm64", t("abi_64")], ["armv7", t("abi_32")], ["x86_64", "x86_64"]].forEach(([v, l]) => { const o = el("option", "", l); o.value = v; o.selected = ((phone && phone.abi) || "") === v; ab.append(o); });
+  const lb = el("label", "fl", t("ph_abi")); lb.append(ab); d.append(lb, el("p", "rn", t("ph_abi_note")));
+  const sv = el("button", "chip on", t("ph_save")); sv.onclick = () => { phone = {android: +a.value || 0, ram: +r.value || 0, abi: ab.value}; store.set("gp-phone", phone); $("sh").classList.remove("open"); controls(); render(); };
+  d.append(sv); s.append(d); $("sh").classList.add("open");
+}
+$("ph").onclick = phoneSheet;
+$("sh").onclick = e => { if (e.target === $("sh")) $("sh").classList.remove("open"); };
+addEventListener("keydown", e => { if (e.key === "Escape") $("sh").classList.remove("open"); });
+function devBlock() {
+  const d = $("dev"); d.textContent = ""; d.append(el("b", "", t("dev_t")), " ");
+  const f = el("a", "", t("fb")); f.href = DEV.fb; f.target = "_blank"; f.rel = "noopener";
+  const m = el("a", "", DEV.email); m.href = "mailto:" + DEV.email + "?subject=" + encodeURIComponent(t("sug_sub"));
+  d.append(f, " · ", m);
+}
+function render() {
+  const g = $("g"); g.textContent = ""; const k = q.toLowerCase(), pr = FAMS[fam];
+  const m = i => (!pr || pr.test(txt(i))) && (!k || txt(i).toLowerCase().includes(k) || i.owner.toLowerCase().includes(k));
+  let list = [], paint;
+  if (view === "news") {
+    items.forEach(i => { if (!m(i)) return; if (i.release && i.release.date) list.push({_o: i, _d: i.release.date, _l: "🚀"}); if (i.first_seen && days(i.first_seen) <= 90) list.push({_o: i, _d: i.first_seen, _l: "🆕"}); });
+    list.sort((a, b) => new Date(b._d) - new Date(a._d));
+    paint = x => { const r = row(Object.assign({}, x._o, {_d: x._d}), x._l); r.onclick = () => sheet(x._o); g.append(r); };
+  } else if (view === "az") { list = items.filter(m).sort((a, b) => a.name.localeCompare(b.name, "en")); paint = i => g.append(row(i)); }
+  else if (view === "fol") { list = items.filter(i => follows.includes(i.id) && m(i)).sort((a, b) => new Date(b.pushed) - new Date(a.pushed)); paint = i => g.append(card(i)); }
+  else {
+    list = items.filter(i => (flt === "all" || (flt === "new" && days(i.pushed) <= 30) || (flt === "assets" && i.assets) || (flt === "rel" && i.release) || (flt === "ok" && compat(i) === "ok") || (flt === "armv7" && has32(i))) && (!stg || stageOf(i) === stg) && (!hArch || !i.archived) && (!hOld || days(i.pushed) <= 365) && m(i));
+    const by = {stars: (a, b) => b.stars - a.stars, dl: (a, b) => (b.downloads || 0) - (a.downloads || 0) || b.stars - a.stars, upd: (a, b) => new Date(b.pushed) - new Date(a.pushed), rel: (a, b) => new Date(b.release ? b.release.date : 0) - new Date(a.release ? a.release.date : 0)};
+    list.sort(by[sort]); paint = (i, n) => g.append(card(i, sort === "stars" || sort === "dl" ? n + 1 : 0));
+  }
+  list.slice(0, shown).forEach(paint);
+  $("st").textContent = !items.length ? t("nodata") : list.length ? list.length + (view === "news" ? "" : t("cnt")) : view === "fol" ? t("empty_f") : t("empty");
+  $("more").hidden = list.length <= shown;
+}
+
+// ---- الإشعارات ----
+const cacheJ = async (k, v) => { try { const c = await caches.open("gp-data"); if (v === undefined) { const r = await c.match(k); return r ? await r.json() : null; } await c.put(k, new Response(JSON.stringify(v))); } catch(e){ return null; } };
+function syncSW() { cacheJ("cfg", {notif, follows, lang}); }
+async function notify(title, body, tag) {
+  try { const reg = await navigator.serviceWorker.ready; await reg.showNotification(title, {body, tag, icon: "icon-192.png", badge: "icon-192.png", lang, dir: lang === "ar" ? "rtl" : "ltr", data: {url: "./"}}); }
+  catch(e) { try { new Notification(title, {body, tag}); } catch(x){} }
+}
+function banner(txt) {
+  const b = $("bn"); b.textContent = txt + "  ›"; b.style.display = "block";
+  b.onclick = () => { b.style.display = "none"; view = "news"; controls(); render(); scrollTo({top: 0, behavior: "smooth"}); };
+  clearTimeout(banner.x); banner.x = setTimeout(() => b.style.display = "none", 9000);
+}
+async function checkChanges() {
+  const local = store.get("gp-snap", null), cur = {}; items.forEach(i => cur[i.id] = i.release ? i.release.tag : "");
+  const sw = await cacheJ("snap"), prev = Object.assign({}, local || {}, sw || {});
+  store.set("gp-snap", cur); cacheJ("snap", cur);
+  if (!local && !sw) return;
+  const fresh = items.filter(i => !(i.id in prev)), ups = items.filter(i => (i.id in prev) && cur[i.id] && prev[i.id] !== cur[i.id] && (notif.all || (notif.fol && follows.includes(i.id))));
+  const go = (arr, one, many) => { if (!arr.length) return; const tl = arr.length === 1 ? one + arr[0].name : many + arr.length; banner(tl); if (Notification.permission === "granted") notify(tl, arr.slice(0, 3).map(i => i.owner + "/" + i.name).join("، "), one); };
+  if (notif.newp) go(fresh, t("n_new"), t("n_new"));
+  go(ups, t("n_upd"), t("n_updn"));
+}
+async function ask() {
+  if (!("Notification" in window)) { toast(t("np_unsup")); return false; }
+  if (Notification.permission === "default") await Notification.requestPermission();
+  if (Notification.permission !== "granted") { toast(t("np_denied")); return false; }
+  return true;
+}
+async function flip(k) { if (!notif[k] && !(await ask())) return; notif[k] = !notif[k]; store.set("gp-n", notif); syncSW(); panel(); periodic(); }
+async function periodic() {
+  try {
+    const reg = await navigator.serviceWorker.ready; if (!("periodicSync" in reg)) return;
+    if (notif.newp || notif.fol || notif.all) { const s = await navigator.permissions.query({name: "periodic-background-sync"}); if (s.state === "granted") await reg.periodicSync.register("gp-check", {minInterval: 3600000}); }
+    else await reg.periodicSync.unregister("gp-check");
+  } catch(e){}
+}
+function panel() {
+  const p = $("np"); p.textContent = ""; p.append(el("h2", "", t("np_t")));
+  [["newp", "np_new"], ["fol", "np_fol"], ["all", "np_all"]].forEach(([k, s]) => { const b = el("button", "chip", t(s)); b.setAttribute("aria-pressed", notif[k]); b.setAttribute("role", "switch"); b.setAttribute("aria-checked", notif[k]); b.onclick = () => flip(k); p.append(b); });
+  const ts = el("button", "chip", t("np_test")); ts.onclick = async () => { if (await ask()) notify(t("test_t"), t("test_b"), "gp-test"); };
+  p.append(ts, el("p", "", t("np_note")));
+  const on = notif.newp || notif.fol || notif.all; $("bell").textContent = on ? "🔔" : "🔕"; $("bell").classList.toggle("on", on);
+}
+$("bell").onclick = () => $("np").classList.toggle("open");
+
+(async () => {
+  if (!phone) phone = await detectPhone(); else if (phone.abi === undefined) phone.abi = (await detectPhone()).abi || "";
+  applyLang(); controls(); panel(); syncSW(); $("g").append(el("div", "sk"), el("div", "sk"), el("div", "sk"));
+  try { const r = await fetch("data/ports.json", {cache: "no-cache"}), d = await r.json(); items = d.items || []; updatedAt = d.updated; } catch(e) {}
+  applyLang(); render(); if (items.length) { await checkChanges(); periodic(); }
+})();
+setInterval(async () => { if (document.hidden) return; try { const d = await (await fetch("data/ports.json", {cache: "no-cache"})).json(); if (d.updated !== updatedAt) { items = d.items || []; updatedAt = d.updated; applyLang(); render(); checkChanges(); } } catch(e){} }, 600000);
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body></html>
